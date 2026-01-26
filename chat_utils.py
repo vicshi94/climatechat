@@ -1,10 +1,10 @@
 from openai import OpenAI
-from langchain.vectorstores import FAISS
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.chat_models import ChatOpenAI
-from langchain.memory import ConversationBufferMemory
-from langchain.chains import ConversationalRetrievalChain
-from langchain.prompts import PromptTemplate
+from langchain_classic.vectorstores import FAISS
+from langchain_classic.embeddings import OpenAIEmbeddings
+from langchain_classic.chat_models import ChatOpenAI
+from langchain_classic.memory import ConversationBufferMemory
+from langchain_classic.chains import ConversationalRetrievalChain
+from langchain_classic.prompts import PromptTemplate
 import datetime
 import streamlit as st
 from io import BytesIO
