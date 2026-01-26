@@ -1,6 +1,8 @@
 streamlit
 openai
-langchain-classic
+langchain
+langchain-community
+langchain-openai
 faiss-cpu
 tiktoken
 fpdf
