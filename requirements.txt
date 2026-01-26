@@ -4,6 +4,7 @@ langchain
 langchain-community==0.2.17
 langchain-openai
 langchain-core
+langchain-classic
 faiss-cpu
 tiktoken
 fpdf
