@@ -1,8 +1,9 @@
 streamlit
 openai
-langchain==0.2.17
+langchain
 langchain-community==0.2.17
-langchain-openai==0.1.25
+langchain-openai
+langchain-core
 faiss-cpu
 tiktoken
 fpdf
