@@ -1,6 +1,7 @@
 from openai import OpenAI
 from langchain_community.vectorstores import FAISS
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+from langchain_openai import OpenAIEmbeddings
+from langchain_openai.chat_models import ChatOpenAI
 from langchain_classic.memory import ConversationBufferMemory
 from langchain_classic.chains import ConversationalRetrievalChain
 from langchain_core.prompts import PromptTemplate
