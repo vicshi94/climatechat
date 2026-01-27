@@ -225,6 +225,6 @@ def run_chat_app(social_cues_opt, source_opt, tone_choice, page_title="Climate C
     download_slot.download_button(
         label="Download as HTML",
         data=html_buffer,
-        file_name="conversation.html",
+        file_name=f"conversation_{hf_uid}.html",
         mime="text/html"
     )
