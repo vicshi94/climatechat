@@ -135,6 +135,19 @@ Assistant answer:
     )
 
 
+def hide_sidebar_nav():
+    st.markdown(
+        """
+        <style>
+        [data-testid="stSidebarNav"] {
+            display: none;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def run_chat_app(social_cues_opt, source_opt, tone_choice, page_title="Climate Change AI Assistant"):
     """Main chat application logic"""
     st.set_page_config(page_title=page_title, page_icon="💬", layout="wide")
