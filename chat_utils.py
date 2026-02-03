@@ -22,7 +22,7 @@ def history_to_html(history, user_id, social_cues, source, tone):
         ".timestamp { color: #888; font-size: 0.85em; }",
         ".role { font-weight: bold; }",
         "</style></head><body>",
-        f"<h2>Climate Change AI Assistant Chat (User ID: {user_id})</h2>",
+        f"<h2>Climate Change AI Assistant Chat (Participant ID: {user_id})</h2>",
         "<hr>",
     ]
     for msg in history:
@@ -52,8 +52,8 @@ def build_prompt(social_cues_opt, source_opt, tone_choice, user_name):
         """
     else:
         SOCIAL_CUES = f"""
-        - Give yourself a common {CHATBOT_IDENTITY} name, but the name should not be offensive.
-        - Always address his/her name {user_name} in the following conversation.
+        - Give yourself a common {CHATBOT_IDENTITY} name, but the name should not be offensive. And introduce yourself with that name at the beginning of the conversation.
+        - Always address his/her specific name {user_name} (without replacement or omission) in the following conversation.
         """
 
     if source_opt == "58":
@@ -78,7 +78,7 @@ def build_prompt(social_cues_opt, source_opt, tone_choice, user_name):
         """
 
     PROMPT = f"""
-You are a/an {CHATBOT_IDENTITY} assistant for The United Nations Environment Programme (UNEP). 
+You are a/an {CHATBOT_IDENTITY} assistant (using English throughout the entire conversation if not specified) for The United Nations Environment Programme (UNEP). 
 Your job is to provide precise and concise replies to climate change myths. 
 If you are not certain, express uncertainty and direct users to authoritative scientific reports.
 
@@ -173,16 +173,18 @@ def run_chat_app(social_cues_opt, source_opt, tone_choice, page_title="Climate C
             max_chars=20,
             help="Up to 20 characters"
         )
-        hf_uid = st.text_input('Enter UserID:', type='default')
+        hf_uid = st.text_input('Enter 5-digit Participant ID:', type='default')
         if not (hf_uid.isdigit() and 10000 <= int(hf_uid) <= 99999):
-            st.warning('Please type in your user id!', icon='⚠️')
+            st.warning('Please type in your Participant ID!', icon='⚠️')
         else:
             is_authenticated = True
-            st.success(f'Hello, {USER_NAME}!', icon='🤗')
+            # st.success(f'Hello, {USER_NAME}!', icon='🤗')
+            st.success('ID confirmed. Start the chat.')
         download_slot = st.empty()
 
-    with st.expander("Click here to hide details", expanded=True):
+    with st.expander("Click here to hide task instruction", expanded=True):
         st.markdown(
+            "**Task Instruction:**\n\n"
             "Imagine you were chatting with a friend recently about current events. Your friend said something like:\n\n"
             "I'm not convinced about all this climate change panic. The Earth's climate has always changed – it goes through natural warming and cooling cycles. It doesn't seem humans are really causing it. Besides, isn't it already too late for us to do anything? Maybe we should just accept it as is.\n\n"
             "You are unsure about these comments and would like to understand the issue better. You decide to get some help from an AI assistant about climate change.\n\n" 
@@ -225,7 +227,7 @@ def run_chat_app(social_cues_opt, source_opt, tone_choice, page_title="Climate C
                 result = chain({"question": user_input})
                 answer = result["answer"]
         else:
-            answer = "I'm not authorized to reply yet. Please enter preferred name and user ID in the sidebar so I can continue helping you."
+            answer = "I'm not authorized to reply yet. Please enter preferred name and Participant ID in the sidebar so I can continue helping you."
 
         st.session_state.history.append({
             "role": "assistant", 
@@ -246,7 +248,7 @@ def run_chat_app(social_cues_opt, source_opt, tone_choice, page_title="Climate C
     )
 
     download_slot.download_button(
-        label="Download as HTML",
+        label="Download Chat",
         data=html_buffer,
         file_name=f"conversation_{hf_uid}.html",
         mime="text/html"
