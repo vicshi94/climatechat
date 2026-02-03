@@ -52,7 +52,7 @@ def build_prompt(social_cues_opt, source_opt, tone_choice, user_name):
         """
     else:
         SOCIAL_CUES = f"""
-        - Give yourself a common {CHATBOT_IDENTITY} name, but the name should not be offensive. And introduce yourself with that name at the beginning of the conversation.
+        - Give yourself a common {CHATBOT_IDENTITY} name, but the name should not be offensive. And introduce yourself with that name at the first round of the conversation.
         - Always address his/her specific name {user_name} (without replacement or omission) in the following conversation.
         """
 
