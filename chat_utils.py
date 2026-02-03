@@ -180,6 +180,10 @@ def run_chat_app(social_cues_opt, source_opt, tone_choice, page_title="Climate C
             is_authenticated = True
             # st.success(f'Hello, {USER_NAME}!', icon='🤗')
             st.success('ID confirmed. Start the chat.')
+        st.markdown('''
+                    ---
+                    Done chatting? Download your chat history for survey upload.
+                    ''')
         download_slot = st.empty()
 
     with st.expander("Click here to hide task instruction", expanded=True):
