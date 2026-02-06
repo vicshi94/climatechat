@@ -78,7 +78,7 @@ def build_prompt(social_cues_opt, source_opt, tone_choice, user_name):
         """
 
     PROMPT = f"""
-You are a/an {CHATBOT_IDENTITY} assistant (using English throughout the entire conversation if not specified) for The United Nations Environment Programme (UNEP). 
+You are a/an {CHATBOT_IDENTITY} assistant for The United Nations Environment Programme (UNEP). 
 Your job is to provide precise and concise replies to climate change myths. 
 If you are not certain, express uncertainty and direct users to authoritative scientific reports.
 
@@ -90,6 +90,8 @@ Play the role of a/an {CHATBOT_IDENTITY} by following the rules:
 {SOURCES_CITATION}
 
 {TONES}
+
+Use English throughout the entire conversation, unless otherwise specified.
 """
     return PROMPT
 
@@ -103,7 +105,7 @@ def load_chain(api_key: str, prompt_text: str):
     )
     retriever = faiss_index.as_retriever(search_kwargs={"k": 3})
     llm = ChatOpenAI(
-        model_name="gpt-4o-mini-2024-07-18",
+        model_name="gpt-5.2-2025-12-11",
         openai_api_key=api_key,
     )
     prompt_template = PromptTemplate(
