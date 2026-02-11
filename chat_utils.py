@@ -175,8 +175,8 @@ def run_chat_app(social_cues_opt, source_opt, tone_choice, page_title="Climate C
             max_chars=20,
             help="Up to 20 characters"
         )
-        hf_uid = st.text_input('Enter 5-digit Participant ID:', type='default')
-        if not (hf_uid.isdigit() and 10000 <= int(hf_uid) <= 99999):
+        hf_uid = st.text_input('Enter 6-digit Participant ID:', type='default')
+        if not (hf_uid.isdigit() and 100000 <= int(hf_uid) <= 999999):
             st.warning('Please type in your Participant ID!', icon='⚠️')
         else:
             is_authenticated = True
