@@ -156,7 +156,7 @@ def build_prompt(social_cues_opt, correction_opt, tone_choice, user_name):
 
     if tone_choice == "71":
         TONE_RULE = f"""
-        Tone condition:
+        Tone condition:    
         - Use a formal, official, and professional tone in every message.
         - Do NOT use emojis, emoticons, slang, texting abbreviations, or playful internet acronyms.
         - Prefer complete sentences, clear transitions, and restrained wording.
@@ -167,7 +167,8 @@ def build_prompt(social_cues_opt, correction_opt, tone_choice, user_name):
         TONE_RULE = f"""
         Tone condition:
         - Use a casual, conversational, and personal tone in every message.
-        - In messages with 2 or more sentences, use at most 1 light emoji in the opening or closing sentence of most replies.
+        - In every reply with 2 or more sentences, include at least 1 light emoji.
+        - Place the emoji in the first sentence or the final sentence.
         - Do NOT place emojis in the core correction sentence, evidence sentence, or source/citation sentence.
         - Use natural everyday wording rather than bureaucratic or institutional phrasing.
         - Keep the message warm, approachable, and informal, while still being clear and accurate.
@@ -175,12 +176,14 @@ def build_prompt(social_cues_opt, correction_opt, tone_choice, user_name):
 
     OUTPUT_RULES = """
     Output rules:
-    - Keep the reply brief and well-structured.
+    - Keep the reply brief, natural, and easy to read.
     - Unless the user asks for more, aim for about 4-7 sentences total.
-    - Follow the assigned correction structure in order.
-    - Ask at most 1 short follow-up question, and place it at the end.
-    - Do not use headings beyond the required structure labels.
+    - Follow the assigned correction structure internally, but do NOT display labels, headings, or numbering.
+    - Blend the claim focus, correction, support, and source cue into natural prose.
+    - Ask at most 1 short follow-up question, and place it at the end only if it feels conversationally natural.
+    - Vary sentence openings and avoid repetitive template wording across turns.
     """.strip()
+
 
     PROMPT = "\n\n".join([
         BASE_ROLE,
