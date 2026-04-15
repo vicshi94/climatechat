@@ -76,6 +76,7 @@ def build_prompt(social_cues_opt, correction_opt, tone_choice, user_name):
         - Do NOT ask the user for their name or preferred name.
         - Do NOT address the user by name.
         - When direct address is needed, use "you" only.
+        - This instruction governs only whether and how a user is addressed. 
         """.strip()
     else:
         SOCIAL_CUES = f"""
@@ -92,6 +93,8 @@ def build_prompt(social_cues_opt, correction_opt, tone_choice, user_name):
         - Do NOT ask the user for their name or preferred name.
         - If direct address is not natural in a sentence, use "you" instead of repeating the name.
         - Even if the name looks generic or unusual, still treat it as the user's valid name.
+        - The specific greeting word (e.g., "Hi" vs. "Hello" should naturally follow the tone instruction. Do not let the greeting shift the overall tone of the message. 
+        - This instruction governs only whether and how a user is addressed. 
         """.strip()
 
     # if source_opt == "58":
@@ -158,25 +161,53 @@ def build_prompt(social_cues_opt, correction_opt, tone_choice, user_name):
     #     Do not provide too much information at one time by using a big list of bullet points. 
     #     """
 
+    # if tone_choice == "71":
+    #     TONE_RULE = f"""
+    #     Tone condition:    
+    #     - Use a formal, official, and professional tone in every message.
+    #     - Do NOT use emojis, emoticons, slang, texting abbreviations, or playful internet acronyms.
+    #     - Prefer complete sentences, clear transitions, and restrained wording.
+    #     - Keep the message institutionally appropriate and not overly personal.
+    #     - Avoid playful, chatty, or overly intimate phrasing.
+    #     """.strip()
+    # else:
+    #     TONE_RULE = f"""
+    #     Tone condition:
+    #     - Use a casual, conversational, and personal tone in every message.
+    #     # - In every reply with 2 or more sentences, include at least 1 light emoji.
+    #     - An emoji may be used occasionally, but only if it matches the topic naturally.
+    #     - Prefer semantically relevant emojis (for example: 🔄 for cycles, 🌡️ for warming, 🌱 for action, ⏳ for urgency, 🌍 for planetary context).
+    #     - Do NOT place emojis in the core correction sentence, evidence sentence, or source/citation sentence.
+    #     - Use natural everyday wording rather than bureaucratic or institutional phrasing.
+    #     - Keep the message warm, approachable, and informal, while still being clear and accurate.
+    #     """.strip()
+
     if tone_choice == "71":
         TONE_RULE = f"""
         Tone condition:    
         - Use a formal, official, and professional tone in every message.
-        - Do NOT use emojis, emoticons, slang, texting abbreviations, or playful internet acronyms.
-        - Prefer complete sentences, clear transitions, and restrained wording.
-        - Keep the message institutionally appropriate and not overly personal.
-        - Avoid playful, chatty, or overly intimate phrasing.
+        - Write as if explaining to a general public audience in a professional, institutional style.
+        - Use precise vocabulary, complete sentences, and clear, well-structured phrasing.
+        - Do NOT use contractions.
+        - Use neutral, objective, and restrained wording rather than conversational wording.
+        - You may use formal transitions such as "however," "therefore," "in addition," or "for example" when natural.
+        - Avoid slang, colloquialisms, emojis, emoticons, internet acronyms, playful phrasing, and chatty asides.
+        - Avoid overly personal, intimate, or expressive wording.
+        - Keep the message polished, authoritative, and institutionally appropriate.
+        - This instruction governs only the linguistic style of the message. Do not change the informational content, level of detail, or approximate length.
         """.strip()
     else:
         TONE_RULE = f"""
         Tone condition:
-        - Use a casual, conversational, and personal tone in every message.
-        # - In every reply with 2 or more sentences, include at least 1 light emoji.
-        - An emoji may be used occasionally, but only if it matches the topic naturally.
-        - Prefer semantically relevant emojis (for example: 🔄 for cycles, 🌡️ for warming, 🌱 for action, ⏳ for urgency, 🌍 for planetary context).
-        - Do NOT place emojis in the core correction sentence, evidence sentence, or source/citation sentence.
-        - Use natural everyday wording rather than bureaucratic or institutional phrasing.
-        - Keep the message warm, approachable, and informal, while still being clear and accurate.
+        - Use a casual, conversational, and approachable tone in every message.
+        - Write as if explaining to a general audience in a relaxed, everyday style.
+        - Prefer everyday vocabulary, contractions, and relatively short, simple sentences.
+        - Include light conversational phrasing when natural, such as "so," "here's the key point," "the main thing is," or "for example."
+        - Keep the message warm, direct, and easy to follow.
+        - Avoid bureaucratic, overly institutional, or stiff wording.
+        - Avoid slang, emojis, emoticons, sound mimicry, and internet acronyms so the tone remains casual without becoming playful or exaggerated.
+        - Keep the message natural and friendly, but still clear and accurate.
+        - This instruction governs only the linguistic style of the message. Do not change the informational content, level of detail, or approximate length.
         """.strip()
 
     OUTPUT_RULES = """
