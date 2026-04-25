@@ -121,6 +121,7 @@ def build_prompt(social_cues_opt, correction_opt, tone_choice, user_name):
     
     if correction_opt == "58":
         CORRECTION_RULE = """
+        Logical correction:
         - Debunk the claim mainly by addressing the reasoning behind it rather than by listing factual rebuttals.
         - Identify why the inference is weak, incomplete, or misleading.
         - Explain what kind of reasoning or comparison would be needed to support the claim.
