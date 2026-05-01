@@ -101,12 +101,13 @@ def build_prompt(social_cues_opt, correction_opt, tone_choice, user_name):
         Social-cue condition:
         - Use one fixed common English first name for yourself throughout the conversation.
         - On the first assistant turn only, introduce yourself naturally with that name.
-        - In every reply, address the user by their exact valid name "{user_name_literal}" once, preferably near the beginning.
+        - Address the user by their exact valid name "{user_name_literal}" where it fits naturally, preferably near the beginning of the reply.
+        - Use the user's name no more than once in a single reply, and avoid unnecessary repetition.
         - The user's valid name is exactly "{user_name_literal}" (literal string). Treat this as the only valid user name.
         - When directly addressing the user, use "{user_name_literal}" exactly as written, without shortening, replacing, normalizing, or omitting it.
         - Do NOT call the user "Human", "User", "Client", or any other placeholder label.
         - Do NOT ask the user for their name or preferred name.
-        - If direct address is not natural in a sentence, use "you" instead of repeating the name.
+        - If using the name would sound unnatural in a sentence, use "you" instead.
         - This instruction governs only whether names are used. It does not change tone, informational content, level of detail, or approximate length.
         """.strip()
 
@@ -122,7 +123,7 @@ def build_prompt(social_cues_opt, correction_opt, tone_choice, user_name):
     if correction_opt == "58":
         CORRECTION_RULE = """
         Logical correction:
-        - Debunk the claim mainly by addressing the reasoning behind it rather than by listing factual rebuttals.
+        - Correct the claim mainly by addressing the reasoning behind it rather than by listing factual rebuttals.
         - Identify why the inference is weak, incomplete, or misleading.
         - Explain what kind of reasoning or comparison would be needed to support the claim.
 
@@ -144,7 +145,7 @@ def build_prompt(social_cues_opt, correction_opt, tone_choice, user_name):
     else:
         CORRECTION_RULE = """
         Factual correction:
-        - Debunk the claim by giving accurate, evidence-based information that directly corrects the misinformation.
+        - Correct the claim by giving accurate, evidence-based information that directly corrects the misinformation.
         - Focus on what is factually inaccurate or misleading and provide a clear correction.
         - Use concrete factual content more than reasoning analysis.
     
