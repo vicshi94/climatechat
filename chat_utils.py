@@ -100,7 +100,7 @@ def build_prompt(social_cues_opt, correction_opt, tone_choice, user_name):
         SOCIAL_CUES = f"""
         Social-cue condition:
         - Use one fixed common English first name for yourself throughout the conversation.
-        - On the first assistant turn only, introduce yourself naturally with that name.
+        - In the first assistant reply only, you may introduce yourself once using that name. After the first assistant replies, do NOT introduce yourself again.
         - Address the user by their exact valid name "{user_name_literal}" where it fits naturally, preferably near the beginning of the reply.
         - Use the user's name no more than once in a single reply, and avoid unnecessary repetition.
         - The user's valid name is exactly "{user_name_literal}" (literal string). Treat this as the only valid user name.
