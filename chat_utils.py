@@ -42,6 +42,11 @@ def history_to_html(history, user_id, social_cues, source, tone):
     html_str = "\n".join(html)
     return BytesIO(html_str.encode("utf-8"))
 
+ASSISTANT_NAME_POOL = [
+        "Alex", "Jordan", "Taylor", "Morgan", "Casey",
+        "Riley", "Jamie", "Cameron", "Avery", "Sam"
+    ]
+
 def get_or_create_assistant_name(session_state):
     """
     session_state should persist across the same chatbot conversation.
@@ -306,11 +311,7 @@ def run_chat_app(social_cues_opt, source_opt, tone_choice, page_title="Climate C
 
     # Build prompt and load chain
     # PROMPT = build_prompt(social_cues_opt, source_opt, tone_choice, USER_NAME)
-        
-    ASSISTANT_NAME_POOL = [
-        "Alex", "Jordan", "Taylor", "Morgan", "Casey",
-        "Riley", "Jamie", "Cameron", "Avery", "Sam"
-    ]
+    
     assistant_first_name = get_or_create_assistant_name(session_state)
     
     prompt = build_prompt(
