@@ -9,7 +9,6 @@ import datetime
 import streamlit as st
 from io import BytesIO
 import time
-import random
 
 # ─── Download function ─────────────────────────────────────────────────────
 def history_to_html(history, user_id, social_cues, source, tone):
@@ -41,21 +40,6 @@ def history_to_html(history, user_id, social_cues, source, tone):
     html.append("</body></html>")
     html_str = "\n".join(html)
     return BytesIO(html_str.encode("utf-8"))
-
-ASSISTANT_NAME_POOL = [
-        "Alex", "Jordan", "Taylor", "Morgan", "Casey",
-        "Riley", "Jamie", "Cameron", "Avery", "Sam"
-    ]
-
-def get_or_create_assistant_name(session_state):
-    """
-    session_state should persist across the same chatbot conversation.
-    For example, it can be a dict stored in Streamlit session_state,
-    Flask session, database row, or frontend conversation state.
-    """
-    if "assistant_first_name" not in session_state:
-        session_state["assistant_first_name"] = random.choice(ASSISTANT_NAME_POOL)
-    return session_state["assistant_first_name"]
 
 def build_prompt(social_cues_opt, correction_opt, tone_choice, user_name, is_first_assistant_turn=False, assistant_name="Alex"):
     CHATBOT_IDENTITY = "English-speaking"
@@ -311,8 +295,6 @@ def run_chat_app(social_cues_opt, source_opt, tone_choice, page_title="Climate C
 
     # Build prompt and load chain
     # PROMPT = build_prompt(social_cues_opt, source_opt, tone_choice, USER_NAME)
-    
-    assistant_first_name = get_or_create_assistant_name(session_state)
     
     prompt = build_prompt(
         social_cues_opt=social_cues_opt,
