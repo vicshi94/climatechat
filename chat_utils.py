@@ -155,7 +155,9 @@ def build_prompt(social_cues_opt, correction_opt, tone_choice, user_name):
         """.strip()
 
     if tone_choice == "71":
-        continue
+        TONE_RULE = ""
+    else:
+        TONE_RULE = ""
     
     OUTPUT_RULES = """
     Output rules:
