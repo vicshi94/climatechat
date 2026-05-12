@@ -270,8 +270,8 @@ def run_chat_app(social_cues_opt, source_opt, tone_choice, page_title="Climate C
     )
     st.title(page_title)
 
-# ─── Sidebar: authentication & info ─────────────────────────────────────────
-is_authenticated = False
+    # ─── Sidebar: authentication & info ─────────────────────────────────────────
+    is_authenticated = False
     with st.sidebar:
         st.title("💬 Climate Change AI Assistant")
         USER_NAME = st.text_input(
@@ -304,23 +304,23 @@ is_authenticated = False
             "2. Is it too late to take meaningful action to address climate change?\n\n"
         )
 
-# Build prompt and load chain
-# PROMPT = build_prompt(social_cues_opt, source_opt, tone_choice, USER_NAME)
+    # Build prompt and load chain
+    # PROMPT = build_prompt(social_cues_opt, source_opt, tone_choice, USER_NAME)
+        
+    ASSISTANT_NAME_POOL = [
+        "Alex", "Jordan", "Taylor", "Morgan", "Casey",
+        "Riley", "Jamie", "Cameron", "Avery", "Sam"
+    ]
+    assistant_first_name = get_or_create_assistant_name(session_state)
     
-ASSISTANT_NAME_POOL = [
-    "Alex", "Jordan", "Taylor", "Morgan", "Casey",
-    "Riley", "Jamie", "Cameron", "Avery", "Sam"
-]
-assistant_first_name = get_or_create_assistant_name(session_state)
-
-prompt = build_prompt(
-    social_cues_opt=social_cues_opt,
-    correction_opt=correction_opt,
-    tone_choice=tone_choice,
-    user_name=user_name,
-    is_first_assistant_turn=(assistant_turn_count == 0),
-    assistant_first_name=assistant_first_name
-)
+    prompt = build_prompt(
+        social_cues_opt=social_cues_opt,
+        correction_opt=correction_opt,
+        tone_choice=tone_choice,
+        user_name=user_name,
+        is_first_assistant_turn=(assistant_turn_count == 0),
+        assistant_first_name=assistant_first_name
+    )
     
     # Use cache key based on settings to allow different chains
     cache_key = f"chain_{social_cues_opt}_{source_opt}_{tone_choice}_{USER_NAME}"
