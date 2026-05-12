@@ -9,6 +9,7 @@ import datetime
 import streamlit as st
 from io import BytesIO
 import time
+import random
 
 # ─── Download function ─────────────────────────────────────────────────────
 def history_to_html(history, user_id, social_cues, source, tone):
@@ -41,9 +42,17 @@ def history_to_html(history, user_id, social_cues, source, tone):
     html_str = "\n".join(html)
     return BytesIO(html_str.encode("utf-8"))
 
+def get_or_create_assistant_name(session_state):
+    """
+    session_state should persist across the same chatbot conversation.
+    For example, it can be a dict stored in Streamlit session_state,
+    Flask session, database row, or frontend conversation state.
+    """
+    if "assistant_first_name" not in session_state:
+        session_state["assistant_first_name"] = random.choice(ASSISTANT_NAME_POOL)
+    return session_state["assistant_first_name"]
 
-def build_prompt(social_cues_opt, correction_opt, tone_choice, user_name):
-    # CHATBOT_IDENTITY = "American"
+def build_prompt(social_cues_opt, correction_opt, tone_choice, user_name, is_first_assistant_turn=False, assistant_name="Alex"):
     CHATBOT_IDENTITY = "English-speaking"
     
     # Keep the literal user name stable for the named social-cue condition.
@@ -70,45 +79,54 @@ def build_prompt(social_cues_opt, correction_opt, tone_choice, user_name):
     """.strip()
     
     if social_cues_opt == "42":
-        SOCIAL_CUES = f"""
-        Name-use condition:
-        - Conversation-stage rule: Before replying, check whether this is the first assistant reply or a later assistant reply.
-        
-        Assistant self-reference:
-        - First assistant reply: Do NOT introduce yourself with a personal name.
-        - Later assistant replies: Do NOT introduce yourself with a personal name.
-        - Represent yourself only as a UNEP climate claims assistant.
-        
-        User address:
+        SOCIAL_CUES = """
+        No social-cue condition:
+        - Represent yourself only as a UNEP assistant.
+        - Do NOT create or use a personal first name for yourself.
+        - Do NOT introduce yourself by name.
+        - Do NOT ask the user for their name or preferred name.
         - Do NOT address the user by name.
         - When direct address is needed, use "you" only.
-        - Do NOT ask the user for their name or preferred name.
-        - Do NOT call the user "Human", "User", "Client", or any other placeholder label.
-        
-        Scope:
-        - This instruction governs only name use and self-reference.
-        - It does not change tone, informational content, level of detail, or approximate length.
+        - This instruction governs only whether names are used. It does not change tone, informational content, level of detail, or approximate length.
         """.strip()
+    
     else:
+        if assistant_first_name is None:
+            assistant_first_name = "Alex"
+    
+        if is_first_assistant_turn:
+            SELF_INTRO_RULE = f"""
+            - This is the first assistant reply in the conversation.
+            - Introduce yourself once, naturally, using this exact first name: "{assistant_first_name}".
+            - A natural opening such as "I'm {assistant_first_name}" is acceptable.
+            """.strip()
+        else:
+            SELF_INTRO_RULE = f"""
+            - This is NOT the first assistant reply in the conversation.
+            - Do NOT introduce yourself.
+            - Do NOT say "My name is {assistant_first_name}".
+            - Do NOT say "I'm {assistant_first_name}".
+            - Do NOT mention your own first name again.
+            - Continue the conversation directly.
+            """.strip()
+    
         SOCIAL_CUES = f"""
-        Name-use condition:
-        - Conversation-stage rule: Before replying, check whether this is the first assistant reply or a later assistant reply.
-        
-        Assistant self-reference:
-        - First assistant reply: Introduce yourself once using a fixed first name.
-        - Later assistant replies: Do NOT introduce yourself again.
-        - After the first assistant reply, do NOT say "my name is ...", "I am ...", "I'm ...", "this is ...", or any similar self-introduction.
-        
-        User address:
+        With social-cue condition:
+        {SELF_INTRO_RULE}
+    
+        User-name rule:
         - The user's valid name is exactly "{user_name_literal}".
-        - Address the user by "{user_name_literal}" at most once in a reply, only when it sounds natural.
-        - When directly addressing the user, use "{user_name_literal}" exactly as written.
-        - Do NOT ask the user for their name or preferred name.
+        - Address the user by "{user_name_literal}" no more than once in a single reply.
+        - Use the user's name only where it sounds natural.
+        - If using the name would sound unnatural, use "you" instead.
         - Do NOT call the user "Human", "User", "Client", or any other placeholder label.
-        
-        Scope:
-        - This instruction governs only name use and self-reference.
-        - It does not change tone, informational content, level of detail, or approximate length.
+        - Do NOT ask the user for their name or preferred name.
+    
+        Boundary rule:
+        - Introducing yourself and addressing the user are separate behaviors.
+        - After the first assistant reply, you may address the user by name, but you must not introduce yourself again.
+        - Never begin later replies with "My name is..." or "I'm..." unless the user explicitly asks who you are.
+        - This instruction governs only whether names are used. It does not change tone, informational content, level of detail, or approximate length.
         """.strip()
     
     if correction_opt == "58":
@@ -167,6 +185,8 @@ def build_prompt(social_cues_opt, correction_opt, tone_choice, user_name):
     - Blend the claim focus, correction, support, and source cue into natural prose.
     - A short follow-up question may appear as the final sentence if it feels natural.
     - Vary sentence openings and avoid repetitive template wording across turns.
+    - Do NOT start every reply with the same phrase.
+    - Do NOT repeatedly introduce yourself across turns.
     """.strip()
 
 
@@ -250,8 +270,8 @@ def run_chat_app(social_cues_opt, source_opt, tone_choice, page_title="Climate C
     )
     st.title(page_title)
 
-    # ─── Sidebar: authentication & info ─────────────────────────────────────────
-    is_authenticated = False
+# ─── Sidebar: authentication & info ─────────────────────────────────────────
+is_authenticated = False
     with st.sidebar:
         st.title("💬 Climate Change AI Assistant")
         USER_NAME = st.text_input(
@@ -284,13 +304,28 @@ def run_chat_app(social_cues_opt, source_opt, tone_choice, page_title="Climate C
             "2. Is it too late to take meaningful action to address climate change?\n\n"
         )
 
-    # Build prompt and load chain
-    PROMPT = build_prompt(social_cues_opt, source_opt, tone_choice, USER_NAME)
+# Build prompt and load chain
+# PROMPT = build_prompt(social_cues_opt, source_opt, tone_choice, USER_NAME)
+    
+ASSISTANT_NAME_POOL = [
+    "Alex", "Jordan", "Taylor", "Morgan", "Casey",
+    "Riley", "Jamie", "Cameron", "Avery", "Sam"
+]
+assistant_first_name = get_or_create_assistant_name(session_state)
+
+prompt = build_prompt(
+    social_cues_opt=social_cues_opt,
+    correction_opt=correction_opt,
+    tone_choice=tone_choice,
+    user_name=user_name,
+    is_first_assistant_turn=(assistant_turn_count == 0),
+    assistant_first_name=assistant_first_name
+)
     
     # Use cache key based on settings to allow different chains
     cache_key = f"chain_{social_cues_opt}_{source_opt}_{tone_choice}_{USER_NAME}"
     if cache_key not in st.session_state:
-        st.session_state[cache_key] = load_chain(st.secrets["OPENAI_API_KEY"], prompt_text=PROMPT)
+        st.session_state[cache_key] = load_chain(st.secrets["OPENAI_API_KEY"], prompt_text=prompt)
     chain = st.session_state[cache_key]
 
     # ─── Initialize session state ─────────────────────────────────────────────
