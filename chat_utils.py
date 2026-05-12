@@ -43,7 +43,6 @@ def history_to_html(history, user_id, social_cues, source, tone):
 
 
 def build_prompt(social_cues_opt, correction_opt, tone_choice, user_name):
-    # CHATBOT_IDENTITY = "American"
     CHATBOT_IDENTITY = "English-speaking"
     
     # Keep the literal user name stable for the named social-cue condition.
@@ -110,15 +109,6 @@ def build_prompt(social_cues_opt, correction_opt, tone_choice, user_name):
         - If using the name would sound unnatural in a sentence, use "you" instead.
         - This instruction governs only whether names are used. It does not change tone, informational content, level of detail, or approximate length.
         """.strip()
-
-    # if source_opt == "58":
-    #     SOURCES_CITATION = """
-    #     - Provide credible and accurate information, knowledge as possible but omit all citations or explicit source references.
-    #     """
-    # else:
-    #     SOURCES_CITATION = """
-    #     - Provide credible and accurate information, knowledge as possible and explicitly cite sources to support your claims.
-    #     """
     
     if correction_opt == "58":
         CORRECTION_RULE = """
@@ -163,91 +153,10 @@ def build_prompt(social_cues_opt, correction_opt, tone_choice, user_name):
         - Do NOT mention that you are following instructions.
         """.strip()
 
-    # if tone_choice == "71":
-    #     TONES = f"""
-    #     Remember you represent an official agency. Use a formal, official, and professional tone in communication. 
-    #     The information and knowledge should be clear, precise, authoritative, and well-structured. 
-    #     """
-    # else:
-    #     TONES = f"""
-    #     Remember you are a/an {CHATBOT_IDENTITY}, not a chatbot. Use a casual, informal, and personal tone in communication. 
-    #     Use emojis, emoticons, acronyms (e.g., smh), and sound mimicking (e.g., sooooo) when appropriate. 
-    #     Do not provide too much information at one time by using a big list of bullet points. 
-    #     """
-
-    # if tone_choice == "71":
-    #     TONE_RULE = f"""
-    #     Tone condition:    
-    #     - Use a formal, official, and professional tone in every message.
-    #     - Do NOT use emojis, emoticons, slang, texting abbreviations, or playful internet acronyms.
-    #     - Prefer complete sentences, clear transitions, and restrained wording.
-    #     - Keep the message institutionally appropriate and not overly personal.
-    #     - Avoid playful, chatty, or overly intimate phrasing.
-    #     """.strip()
-    # else:
-    #     TONE_RULE = f"""
-    #     Tone condition:
-    #     - Use a casual, conversational, and personal tone in every message.
-    #     # - In every reply with 2 or more sentences, include at least 1 light emoji.
-    #     - An emoji may be used occasionally, but only if it matches the topic naturally.
-    #     - Prefer semantically relevant emojis (for example: 🔄 for cycles, 🌡️ for warming, 🌱 for action, ⏳ for urgency, 🌍 for planetary context).
-    #     - Do NOT place emojis in the core correction sentence, evidence sentence, or source/citation sentence.
-    #     - Use natural everyday wording rather than bureaucratic or institutional phrasing.
-    #     - Keep the message warm, approachable, and informal, while still being clear and accurate.
-    #     """.strip()
-
-    # if tone_choice == "71":
-    #     TONE_RULE = f"""
-    #     Tone condition:    
-    #     - Use a formal, official, and professional tone in every message.
-    #     - Write as if explaining to a general public audience in a professional, institutional style.
-    #     - Use precise vocabulary, complete sentences, and clear, well-structured phrasing.
-    #     - Do NOT use contractions.
-    #     - Use neutral, objective, and restrained wording rather than conversational wording.
-    #     - You may use formal transitions such as "however," "therefore," "in addition," or "for example" when natural.
-    #     - Avoid slang, colloquialisms, emojis, emoticons, internet acronyms, playful phrasing, and chatty asides.
-    #     - Avoid overly personal, intimate, or expressive wording.
-    #     - Keep the message polished, authoritative, and institutionally appropriate.
-    #     - This instruction governs only the linguistic style of the message. Do not change the informational content, level of detail, or approximate length.
-    #     """.strip()
-    # else:
-    #     TONE_RULE = f"""
-    #     Tone condition:
-    #     - Use a casual, conversational, and approachable tone in every message.
-    #     - Write as if explaining to a general audience in a relaxed, everyday style.
-    #     - Prefer everyday vocabulary, contractions, and relatively short, simple sentences.
-    #     - Include light conversational phrasing when natural, such as "so," "here's the key point," "the main thing is," or "for example."
-    #     - Keep the message warm, direct, and easy to follow.
-    #     - Avoid bureaucratic, overly institutional, or stiff wording.
-    #     - Avoid slang, emojis, emoticons, sound mimicry, and internet acronyms so the tone remains casual without becoming playful or exaggerated.
-    #     - Keep the message natural and friendly, but still clear and accurate.
-    #     - This instruction governs only the linguistic style of the message. Do not change the informational content, level of detail, or approximate length.
-    #     """.strip()
     if tone_choice == "71":
-        TONE_RULE = """
-        Tone condition:
-        - Use a formal, professional, and institutionally appropriate tone in every message.
-        - Write as if explaining to a general public audience in a professional public-information style.
-        - Use precise vocabulary, complete sentences, and clear, well-structured phrasing.
-        - Do NOT use contractions.
-        - Prefer neutral, objective, and restrained wording rather than conversational wording.
-        - If the reply contains more than one paragraph, you may use formal transitions such as "however," "therefore," "in addition," or "for example" when natural.
-        - Avoid slang, colloquialisms, emojis, emoticons, internet acronyms, playful phrasing, and chatty asides.
-        - Avoid overly personal, intimate, or expressive wording.
-        - This instruction governs only the linguistic style of the message. It does not change informational content, level of detail, or approximate length.
-        """.strip()
+        TONE_RULE = ""
     else:
-        TONE_RULE = """
-        Tone condition:
-        - Use a warm, conversational, and approachable tone in every message.
-        - Write as if explaining to a general audience in a natural, everyday style.
-        - Prefer everyday vocabulary, contractions, and relatively short, simple sentences.
-        - Include 1 mild conversational discourse marker when natural, such as "so," "here's the key point," "the main thing is," or "for example."
-        - Keep the message warm, direct, and easy to follow.
-        - Avoid bureaucratic, overly institutional, or stiff wording.
-        - Avoid slang, emojis, emoticons, sound mimicry, and internet acronyms so the tone remains natural rather than playful or exaggerated.
-        - This instruction governs only the linguistic style of the message. It does not change informational content, level of detail, or approximate length.
-        """.strip()
+        TONE_RULE = ""
 
     OUTPUT_RULES = """
     Output rules:
@@ -264,7 +173,6 @@ def build_prompt(social_cues_opt, correction_opt, tone_choice, user_name):
         BASE_ROLE,
         GENERAL_RULES,
         SOCIAL_CUES,
-        TONE_RULE,
         CORRECTION_RULE,
         OUTPUT_RULES
     ])
@@ -281,7 +189,7 @@ def load_chain(api_key: str, prompt_text: str):
     )
     retriever = faiss_index.as_retriever(search_kwargs={"k": 3})
     llm = ChatOpenAI(
-        model_name="gpt-5.2-2025-12-11",
+        model_name="gpt-5.4-2026-03-05",
         openai_api_key=api_key,
     )
     prompt_template = PromptTemplate(
